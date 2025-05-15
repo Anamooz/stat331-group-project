@@ -1,0 +1,16 @@
+---
+title: "Stat 331 Group Project"
+author: "Tevan Kim, Will Ton, Eli Newman, Trycia Vong"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    toc: true
+editor: source
+execute: 
+  error: true
+  echo: true
+  message: false
+  warning: false
+---
+
