@@ -20,9 +20,14 @@ print("Eli T")
 
 ```{r}
 library(ggplot2)
+library(tidyverse)
 ```
 
 ```{r}
 print("HELLLO WORLD")
+```
+
+```{r}
+print("hewwo :3")
 ```
 
