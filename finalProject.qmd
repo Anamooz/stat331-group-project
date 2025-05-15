@@ -18,3 +18,7 @@ execute:
 print("Will T")
 ```
 
+```{r}
+library(ggplot2)
+```
+
