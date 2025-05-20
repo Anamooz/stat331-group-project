@@ -17,12 +17,10 @@ execute:
 ```{r setup}
 library(ggplot2)
 library(tidyverse)
-library(janitor)
 
 gdp <- read_csv("GDP_data.csv", col_types = cols(.default = "c"))
 co2 <- read_csv("CO2_Data.csv", col_types = cols(.default = "c"))
 ```
-
 ## Combine data into long format and combine
 
 ```{r}
@@ -38,135 +36,30 @@ co2_long <- co2 |>
                values_to = "co2_emissions")
 
 
-combined_data <- full_join(gpd_long, co2_long, by = c("country", "year")) |> 
-  clean_names()
+combined_data <- inner_join(gpd_long, co2_long, by = c("country", "year"))
 ```
+
 
 ## Introduction
 
-\[Description of data\].
-
-The data we are exploring is the GDP per capita of every country in the world from 1800 projected until 2100 in 2017 international dollars, and the CO2 emissions per capita of every country in the world from 1800 until 2022 in tonnes per capita.
-
-https://www.iea.org/commentaries/the-relationship-between-growth-in-gdp-and-co2-has-loosened-it-needs-to-be-cut-completely
-
-**Hypothesis:** Based on our initial research, we hypothesize that most countries on this list will have a diverging pattern between CO2 emissions and GDP per capita. This, we posit, is due to the fact that more countries have begun adopting clean power generation more widely that previous decades and phasing out fossil fuels. Therefore, GDP per capita continues to grow without having to burn so much CO2.
+Description of data. Hypothesize the relationship between the variables
 
 ```{r}
 
 ```
+
 
 ## Data Cleaning
 
 ```{r}
-#| code-fold: true
 
-# Group Countries into larger regions
-europe <- c(
-  "Albania", "Andorra", "Austria", "Belarus", "Belgium",
-  "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus",
-  "Czech Republic", "Denmark", "Estonia", "Finland", "France",
-  "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy",
-  "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg",
-  "Malta", "Moldova", "Monaco", "Montenegro", "Netherlands",
-  "North Macedonia", "Norway", "Poland", "Portugal", "Romania",
-  "Russia", "San Marino", "Serbia", "Slovakia", "Slovenia",
-  "Spain", "Sweden", "Switzerland", "Ukraine", "United Kingdom",
-  "Vatican City","UK","Slovak Republic"
-)
-
-africa <- c(
-  "Algeria","Angola","Benin","Botswana","Burkina Faso","Burundi",
-  "Cabo Verde","Cameroon","Central African Republic","Chad",
-  "Comoros","Congo, Republic of","Congo, Democratic Republic of",
-  "Côte d'Ivoire","Djibouti","Egypt","Equatorial Guinea","Eritrea",
-  "Eswatini","Ethiopia","Gabon","Gambia","Ghana","Guinea",
-  "Guinea-Bissau","Kenya","Lesotho","Liberia","Libya","Madagascar",
-  "Malawi","Mali","Mauritania","Mauritius","Morocco","Mozambique",
-  "Namibia","Niger","Nigeria","Rwanda","São Tomé and Príncipe",
-  "Senegal","Seychelles","Sierra Leone","Somalia","South Africa",
-  "South Sudan","Sudan","Tanzania","Togo","Tunisia","Uganda","Zambia","Zimbabwe",
-  "Cote d'Ivoire","Congo, Dem. Rep.","Cape Verde","Sao Tome and Principe","Congo, Rep."
-)
-
-asia <- c(
-  "Afghanistan","Armenia","Azerbaijan","Bahrain","Bangladesh","Bhutan",
-  "Brunei","Cambodia","China","Cyprus","Georgia","India","Indonesia",
-  "Iran","Iraq","Israel","Japan","Jordan","Kazakhstan","Kuwait","Kyrgyzstan",
-  "Laos","Lebanon","Malaysia","Maldives","Mongolia","Myanmar","Nepal",
-  "North Korea","Oman","Pakistan","Palestine","Philippines","Qatar",
-  "Saudi Arabia","Singapore","South Korea","Sri Lanka","Syria","Tajikistan",
-  "Thailand","Timor-Leste","Turkey","Turkmenistan","UAE","Uzbekistan","Vietnam","Yemen",
-  "Hong Kong, China","Kyrgyz Republic","Lao","Taiwan"
-)
-
-north_america <- c(
-  "Antigua and Barbuda","Bahamas","Barbados","Belize","Canada",
-  "Costa Rica","Cuba","Dominica","Dominican Republic","El Salvador",
-  "Grenada","Guatemala","Haiti","Honduras","Jamaica","Mexico",
-  "Nicaragua","Panama","Saint Kitts and Nevis","Saint Lucia",
-  "Saint Vincent and the Grenadines","Trinidad and Tobago","United States","USA"
-)
-
-south_america <- c(
-  "Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador",
-  "Guyana","Paraguay","Peru","Suriname","Uruguay","Venezuela",
-  "St. Kitts and Nevis","St. Lucia","St. Vincent and the Grenadines"
-)
-
-oceania <- c(
-  "Australia","Fiji","Kiribati","Marshall Islands","Micronesia",
-  "Nauru","New Zealand","Palau","Papua New Guinea","Samoa",
-  "Solomon Islands","Tonga","Tuvalu","Vanuatu","Micronesia, Fed. Sts."
-)
-```
-
-```{r}
-# First, determine if there is a pattern in missing data
-combined_data |> 
-  filter(if_any(.cols = everything(),
-                .fns = is.na)) |> 
-  summarize(na_obs = n(),
-            across(.cols = country:co2_emissions,
-                   ~ any(is.na(.)))) |> 
-  kable()
-
-combined_data |> 
-  mutate(year = as.numeric(year),
-         country = fct(country),
-         region = fct_collapse(.f = country,
-                               "Europe"        = europe,
-                               "Africa"        = africa,
-                               "Asia"          = asia,
-                               "North America" = north_america,
-                               "South America" = south_america,
-                               "Oceania"       = oceania),
-         missing_data = is.na(gdp) | is.na(co2_emissions),
-         missing_gdp = is.na(gdp),
-         missing_emissions = is.na(co2_emissions)) |> 
-  group_by(region, year) |> 
-  summarize(prop_missing = sum(missing_data)/n(),
-            prop_missing_gdp = sum(missing_gdp)/n(),
-            prop_missing_emissions = sum(missing_emissions)/n()) |> 
-  filter(!prop_missing == 0,
-         !year >= 2025) |> 
-  ggplot(aes(y = prop_missing,
-             x = year)) +
-  geom_col() +
-  facet_wrap(~ region)
-
-# Then, remove all observation which contain NA
-combined_clean <- combined_data |> 
-  filter(!if_any(.cols = everything(),
-                .fns = is.na))
 ```
 
 Discuss any data cleaning process and decisions that may impact the analysis.
 
-## Modeling the Relationship between \_\_\_ and \_\_\_\_
+## Modeling the Relationship between ___ and ____
 
 ## Cross-Validation
 
 ## Conclusion
-
 **Citations**
