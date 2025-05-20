@@ -46,7 +46,14 @@ combined_data <- full_join(gpd_long, co2_long, by = c("country", "year")) |>
 
 \[Description of data\].
 
-**Hypothesis:** We expect that GDP and CO2 emission (both per capita) are proportional because countries with more resources. . .
+The data we are exploring is the GDP per capita of every country in the world from 1800 projected until 2100 in 2017 international dollars, and the CO2 emissions per capita of every country in the world from 1800 until 2022 in tonnes per capita.
+
+https://www.iea.org/commentaries/the-relationship-between-growth-in-gdp-and-co2-has-loosened-it-needs-to-be-cut-completely
+
+
+**Hypothesis:** Based on our initial research, we hypothesize that most countries on this list will have a diverging pattern between CO2 emissions and GDP per capita. This, we posit, is due to the fact that more countries have begun adopting clean power generation more widely that previous decades and phasing out fossil fuels. Therefore, GDP per capita continues to grow without having to burn so much CO2.
+
+
 
 ```{r}
 
