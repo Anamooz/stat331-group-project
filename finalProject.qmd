@@ -21,7 +21,7 @@ library(tidyverse)
 gdp <- read_csv("GDP_data.csv", col_types = cols(.default = "c"))
 co2 <- read_csv("CO2_Data.csv", col_types = cols(.default = "c"))
 ```
-## Combine data into long format and combine
+## Combine data into long format and combine 
 
 ```{r}
 gpd_long <- gdp |> 
