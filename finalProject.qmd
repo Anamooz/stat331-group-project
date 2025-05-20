@@ -17,6 +17,7 @@ execute:
 ```{r setup}
 library(ggplot2)
 library(tidyverse)
+library(janitor)
 
 gdp <- read_csv("GDP_data.csv", col_types = cols(.default = "c"))
 co2 <- read_csv("CO2_Data.csv", col_types = cols(.default = "c"))
@@ -36,7 +37,8 @@ co2_long <- co2 |>
                values_to = "co2_emissions")
 
 
-combined_data <- inner_join(gpd_long, co2_long, by = c("country", "year"))
+combined_data <- inner_join(gpd_long, co2_long, by = c("country", "year")) |> 
+  clean_names()
 ```
 
 
