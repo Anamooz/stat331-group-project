@@ -50,10 +50,7 @@ The data we are exploring is the GDP per capita of every country in the world fr
 
 https://www.iea.org/commentaries/the-relationship-between-growth-in-gdp-and-co2-has-loosened-it-needs-to-be-cut-completely
 
-
 **Hypothesis:** Based on our initial research, we hypothesize that most countries on this list will have a diverging pattern between CO2 emissions and GDP per capita. This, we posit, is due to the fact that more countries have begun adopting clean power generation more widely that previous decades and phasing out fossil fuels. Therefore, GDP per capita continues to grow without having to burn so much CO2.
-
-
 
 ```{r}
 
