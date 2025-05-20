@@ -141,10 +141,6 @@ combined_data |>
                                "North America" = north_america,
                                "South America" = south_america,
                                "Oceania"       = oceania),
-                               # optionally catch any stray names:
-                               # "Other"       = setdiff(unique(country),
-                               #                         c(europe, africa, asia,
-                               #                           north_america, south_america, oceania)),
          missing_data = is.na(gdp) | is.na(co2_emissions),
          missing_gdp = is.na(gdp),
          missing_emissions = is.na(co2_emissions)) |> 
