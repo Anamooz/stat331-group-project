@@ -150,7 +150,7 @@ combined_data |>
             prop_missing_emissions = sum(missing_emissions)/n()) |> 
   filter(!prop_missing == 0,
          !year >= 2025) |> 
-  ggplot(aes(y = prop_missing,
+  ggplot(aes(y = prop_missing_emissions,
              x = year)) +
   geom_col() +
   facet_wrap(~ region)
