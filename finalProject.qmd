@@ -12,11 +12,36 @@ execute:
   echo: true
   message: false
   warning: false
----``
+---
 
-```{r}
+```{r setup}
 library(ggplot2)
 library(tidyverse)
+
+#data set 1
+#data set 2
+```
+
+## Introduction
+
+Description of data. Hypothesize the relationship between the variables
+
+```{r}
+
 ```
 
 
+## Data Cleaning
+
+```{r}
+
+```
+
+Discuss any data cleaning process and decisions that may impact the analysis.
+
+## Modeling the Relationship between ___ and ____
+
+## Cross-Validation
+
+## Conclusion
+**Citations**
