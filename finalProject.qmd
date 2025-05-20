@@ -18,9 +18,29 @@ execute:
 library(ggplot2)
 library(tidyverse)
 
-#data set 1
-#data set 2
+gdp <- read_csv("GDP_data.csv", col_types = cols(.default = "c"))
+co2 <- read_csv("CO2_Data.csv", col_types = cols(.default = "c"))
 ```
+## Combine data into long format and combine
+
+```{r}
+gpd_long <- gdp |> 
+  pivot_longer(cols = -country,
+               names_to = "year",
+               values_to = "GDP")
+
+
+co2_long <- co2 |> 
+  pivot_longer(cols = -country,
+               names_to = "year",
+               values_to = "co2_emissions")
+
+
+combined_data <- inner_join(gpd_long, co2_long, by = c("country", "year"))
+```
+
+
+
 
 ## Introduction
 
