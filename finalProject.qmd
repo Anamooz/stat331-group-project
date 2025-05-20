@@ -22,6 +22,7 @@ library(janitor)
 gdp <- read_csv("GDP_data.csv", col_types = cols(.default = "c"))
 co2 <- read_csv("CO2_Data.csv", col_types = cols(.default = "c"))
 ```
+
 ## Combine data into long format and combine
 
 ```{r}
@@ -37,33 +38,44 @@ co2_long <- co2 |>
                values_to = "co2_emissions")
 
 
-combined_data <- inner_join(gpd_long, co2_long, by = c("country", "year")) |> 
+combined_data <- full_join(gpd_long, co2_long, by = c("country", "year")) |> 
   clean_names()
 ```
 
-
-
-
 ## Introduction
 
-Description of data. Hypothesize the relationship between the variables
+\[Description of data\].
+
+**Hypothesis:** We expect that GDP and CO2 emission (both per capita) are proportional because countries with more resources. . .
 
 ```{r}
 
 ```
-
 
 ## Data Cleaning
 
 ```{r}
+# First, determine if there is a pattern in missing data
+combined_data |> 
+  filter(if_any(.cols = everything(),
+                .fns = is.na)) |> 
+  summarize(na_obs = n(),
+            across(.cols = country:co2_emissions,
+                   ~ any(is.na(.)))) |> 
+  kable()
 
+# Then, remove all observation which contain NA
+combined_clean <- combined_data |> 
+  filter(!if_any(.cols = everything(),
+                .fns = is.na))
 ```
 
 Discuss any data cleaning process and decisions that may impact the analysis.
 
-## Modeling the Relationship between ___ and ____
+## Modeling the Relationship between \_\_\_ and \_\_\_\_
 
 ## Cross-Validation
 
 ## Conclusion
+
 **Citations**
