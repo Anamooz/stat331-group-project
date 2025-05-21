@@ -59,6 +59,8 @@ https://www.iea.org/commentaries/the-relationship-between-growth-in-gdp-and-co2-
 
 ## Data Cleaning
 
+By analyzing the data below, it
+
 ```{r}
 #| code-fold: true
 
@@ -137,16 +139,16 @@ combined_data |>
 combined_data |> 
   mutate(year = as.numeric(year),
          country = fct(country),
-         region = fct_collapse(.f = country,
-                               "Europe"        = europe,
-                               "Africa"        = africa,
-                               "Asia"          = asia,
-                               "North America" = north_america,
-                               "South America" = south_america,
-                               "Oceania"       = oceania),
+#         region = fct_collapse(.f = country,
+#                               "Europe"        = europe,
+#                               "Africa"        = africa,
+#                               "Asia"          = asia,
+#                               "North America" = north_america,
+#                               "South America" = south_america,
+#                               "Oceania"       = oceania),
          missing_gdp = is.na(gdp),
          missing_emissions = is.na(co2_emissions)) |> 
-  group_by(region, year) |> 
+  group_by(country, year) |> 
   summarize(prop_missing_gdp = sum(missing_gdp)/n(),
             prop_missing_emissions = sum(missing_emissions)/n()) |> 
   filter(prop_missing_gdp != 0 | prop_missing_emissions != 0,
@@ -160,8 +162,8 @@ combined_data |>
              fill = datatype)) +
   geom_col(position = position_dodge(width = 0.8),
            width    = 0.7) +
-  facet_wrap(~ region) +
-  labs(title = "Regions with missing data before 2023",
+  facet_wrap(~ country) +
+  labs(title = "Countries with missing data before 2023",
        subtitle = "Proportion of Missing Data",
        y = "",
        x = "Year",
