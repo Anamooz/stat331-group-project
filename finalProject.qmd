@@ -18,6 +18,7 @@ execute:
 library(ggplot2)
 library(tidyverse)
 library(janitor)
+library(knitr)
 
 gdp <- read_csv("GDP_data.csv", col_types = cols(.default = "c"))
 co2 <- read_csv("CO2_Data.csv", col_types = cols(.default = "c"))
@@ -122,6 +123,8 @@ oceania <- c(
 ```
 
 ```{r}
+#| warning: false
+#| message: false
 # First, determine if there is a pattern in missing data
 combined_data |> 
   filter(if_any(.cols = everything(),
@@ -141,24 +144,34 @@ combined_data |>
                                "North America" = north_america,
                                "South America" = south_america,
                                "Oceania"       = oceania),
-         missing_data = is.na(gdp) | is.na(co2_emissions),
          missing_gdp = is.na(gdp),
          missing_emissions = is.na(co2_emissions)) |> 
   group_by(region, year) |> 
-  summarize(prop_missing = sum(missing_data)/n(),
-            prop_missing_gdp = sum(missing_gdp)/n(),
+  summarize(prop_missing_gdp = sum(missing_gdp)/n(),
             prop_missing_emissions = sum(missing_emissions)/n()) |> 
-  filter(!prop_missing == 0,
-         !year >= 2025) |> 
-  ggplot(aes(y = prop_missing_emissions,
-             x = year)) +
-  geom_col() +
-  facet_wrap(~ region)
+  filter(prop_missing_gdp != 0 | prop_missing_emissions != 0,
+         !year >= 2023) |> 
+  pivot_longer(
+    cols      = c(prop_missing_gdp, prop_missing_emissions),
+    names_to  = "datatype",
+    values_to = "prop_missing") |> 
+  ggplot(aes(y = prop_missing,
+             x = year,
+             fill = datatype)) +
+  geom_col(position = position_dodge(width = 0.8),
+           width    = 0.7) +
+  facet_wrap(~ region) +
+  labs(title = "Regions with missing data before 2023",
+       subtitle = "Proportion of Missing Data",
+       y = "",
+       x = "Year",
+       fill = "Missing")
 
 # Then, remove all observation which contain NA
 combined_clean <- combined_data |> 
   filter(!if_any(.cols = everything(),
-                .fns = is.na))
+                .fns = is.na),
+         !year >= 2023)
 ```
 
 Discuss any data cleaning process and decisions that may impact the analysis.
