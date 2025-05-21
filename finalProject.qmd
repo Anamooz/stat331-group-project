@@ -173,7 +173,7 @@ combined_data |>
        x = "Year",
        fill = "Missing")
 
-# Then, remove all observation which contain NA
+# Then, remove all observation which contain NA, and all observations beyond 2022.
 combined_clean <- combined_data |> 
   filter(!if_any(.cols = everything(),
                 .fns = is.na),
