@@ -19,6 +19,9 @@ library(ggplot2)
 library(tidyverse)
 library(janitor)
 library(knitr)
+library(gganimate)
+library(gifski)
+
 
 gdp <- read_csv("GDP_data.csv", col_types = cols(.default = "c"))
 co2 <- read_csv("CO2_Data.csv", col_types = cols(.default = "c"))
@@ -191,23 +194,30 @@ Describe the fit of the regression model (both in table and written format).
 
 2.1: Data Visualization 
   Plot 1: the relationship between the two quantitative variables we are looking at. (aggregate values over all years     for each country)
+
 ```{r}
 combined_clean |> 
-  mutate(gdp = as.numeric(gdp),
-         co2_emissions = as.numeric(co2_emissions)) |> 
-  group_by(year) |> 
-  summarise(total_gdp = sum(gdp, na.rm = TRUE),
-            total_co2 = sum(co2_emissions, na.rm = TRUE)) |> 
-  ggplot(aes(x = total_gdp, y = total_co2)) +
-  geom_point() +
-  labs(title = "Aggregate GDP vs CO₂ Emissions by Year",
-       x = "Total GDP per capita",
-       y = "Total CO₂ Emissions per capita") +
+  mutate(gdp = as.numeric(gsub(",", "", gdp)),
+         co2_emissions = as.numeric(gsub(",", "", co2_emissions))) |> 
+  group_by(country) |> 
+  summarise(avg_gdp = mean(gdp, na.rm = TRUE),
+            avg_co2 = mean(co2_emissions, na.rm = TRUE)) |> 
+  filter(!is.na(avg_gdp) & !is.na(avg_co2)) |> 
+  ggplot(aes(x = avg_gdp, y = avg_co2)) +
+  geom_point(color = "steelblue", size = 3) +
+  labs(
+    title = "Average CO₂ Emissions vs. Average GDP per Country",
+    x = "Average GDP Per Capita",
+    y = "Average CO₂ Emissions Per Capita") +
   theme_minimal()
 ```
   
   
   Plot 2: how the relationship from plot 1 changes over time(animated plot)
+
+```
+
+
   
 2.2: Linear Regression
   fit a simple linear regression model to the data. To perform your linear regression, you will likely want to summarize    your data so you have one x value and one y value per country. You may do this by averaging (or taking the median)      across all years, averaging across a subset of years, or picking a year of particular interest ( do the same thing as   in plot #1). Make sure you discuss your decision in your written report.
