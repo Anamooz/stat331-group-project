@@ -180,7 +180,47 @@ combined_clean <- combined_data |>
          !year >= 2023)
 ```
 
-## Modeling the Relationship between \_\_\_ and \_\_\_\_
+## Modeling the Relationship between GDP per capita  and CO2 emission per capita
+
+Written Components:
+Present and discuss visualizations of the relationship between the variables.
+Describe the statistical method used – linear regression.
+Present the estimated regression model (in notation).
+Interpret the linear regression coefficients (in context).
+Describe the fit of the regression model (both in table and written format).
+
+2.1: Data Visualization 
+  Plot 1: the relationship between the two quantitative variables we are looking at. (aggregate values over all years     for each country)
+```{r}
+combined_clean |> 
+  mutate(gdp = as.numeric(gdp),
+         co2_emissions = as.numeric(co2_emissions)) |> 
+  group_by(year) |> 
+  summarise(total_gdp = sum(gdp, na.rm = TRUE),
+            total_co2 = sum(co2_emissions, na.rm = TRUE)) |> 
+  ggplot(aes(x = total_gdp, y = total_co2)) +
+  geom_point() +
+  labs(title = "Aggregate GDP vs CO₂ Emissions by Year",
+       x = "Total GDP per capita",
+       y = "Total CO₂ Emissions per capita") +
+  theme_minimal()
+```
+  
+  
+  Plot 2: how the relationship from plot 1 changes over time(animated plot)
+  
+2.2: Linear Regression
+  fit a simple linear regression model to the data. To perform your linear regression, you will likely want to summarize    your data so you have one x value and one y value per country. You may do this by averaging (or taking the median)      across all years, averaging across a subset of years, or picking a year of particular interest ( do the same thing as   in plot #1). Make sure you discuss your decision in your written report.
+  
+2.3: Model Fit
+  Make a nicely formatted table that presents the following:
+  - The variance in the response values. (A)
+  - The variance in the fitted values from your regression model. (B)
+  - The variance in the residuals from your regression model.
+  - The model R2 (B / A)
+
+
+
 
 ## Cross-Validation
 
