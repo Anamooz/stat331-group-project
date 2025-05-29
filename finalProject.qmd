@@ -21,7 +21,7 @@ library(janitor)
 library(knitr)
 library(gganimate)
 library(gifski)
-
+library(broom)
 
 gdp <- read_csv("GDP_data.csv", col_types = cols(.default = "c"))
 co2 <- read_csv("CO2_Data.csv", col_types = cols(.default = "c"))
@@ -246,6 +246,27 @@ anim_save("avg_gdp_vs_co2_over_time.gif", animation = last_animation())
 2.2: Linear Regression
   fit a simple linear regression model to the data. To perform your linear regression, you will likely want to summarize    your data so you have one x value and one y value per country. You may do this by averaging (or taking the median)      across all years, averaging across a subset of years, or picking a year of particular interest ( do the same thing as   in plot #1). Make sure you discuss your decision in your written report.
   
+```{r}
+#Average gdp and co2 per country over all years
+my_model <- combined_clean |>
+  group_by(country) |> 
+  #turns 12.3k to 12300 or 12k to 12000
+  mutate(
+  gdp = case_when(
+    grepl("k$", gdp, ignore.case = TRUE) ~ as.numeric(sub("k", "", gdp, ignore.case = TRUE)) * 1000,
+    TRUE ~ as.numeric(gsub(",", "", gdp))
+  )) |>
+  mutate(co2_emissions = as.numeric(co2_emissions)) |>
+  summarise(avg_gdp_all_years = mean(gdp, na.rm = TRUE),
+            avg_co2_all_years = mean(co2_emissions, na.rm = TRUE))
+
+regression_data <- lm(avg_co2_all_years ~ avg_gdp_all_years, data = my_model)
+
+tidy(regression_data) |> kable()
+broom::glance(regression_data) |>  kable()
+```
+  
+  
 2.3: Model Fit
   Make a nicely formatted table that presents the following:
   - The variance in the response values. (A)
@@ -261,3 +282,5 @@ anim_save("avg_gdp_vs_co2_over_time.gif", animation = last_animation())
 ## Conclusion
 
 **Citations**
+
+https://chatgpt.com/share/6837b5d4-9aa0-8009-9faf-83f213beced7
