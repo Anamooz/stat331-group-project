@@ -22,6 +22,7 @@ library(knitr)
 library(gganimate)
 library(gifski)
 library(broom)
+library(kableExtra)
 
 gdp <- read_csv("GDP_data.csv", col_types = cols(.default = "c"))
 co2 <- read_csv("CO2_Data.csv", col_types = cols(.default = "c"))
@@ -279,7 +280,17 @@ broom::glance(regression_data) |>  kable()
   - The variance in the residuals from your regression model.
   - The model R2 (B / A)
 
-
+```{r}
+aug <- augment(regression_data)
+aug |> 
+  summarize(var_response = var(avg_co2_all_years),
+            var_fitted = var(.fitted),
+            var_resid = var(.resid),
+            R_squared = var_fitted/var_response) |> 
+  kable() |> 
+  kable_styling(full_width = F,
+                bootstrap_options = "striped")
+```
 
 
 ## Cross-Validation
