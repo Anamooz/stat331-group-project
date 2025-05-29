@@ -287,9 +287,13 @@ aug |>
             var_fitted = var(.fitted),
             var_resid = var(.resid),
             R_squared = var_fitted/var_response) |> 
-  kable() |> 
+  kable(col.names  = c("Response (A)", "Fitted (B)", "Residuals", "(B/A)"),
+        align     = "c") |> 
   kable_styling(full_width = F,
-                bootstrap_options = "striped")
+                bootstrap_options = c("striped")) |> 
+  add_header_above(c("Variance" = 3, "R\u00B2" = 1)) |> 
+  add_header_above(c("Model Fit" = 4),
+                   font_size = "large")
 ```
 
 
