@@ -189,17 +189,13 @@ combined_clean <- combined_data |>
          !year >= 2023)
 ```
 
-## Modeling the Relationship between GDP per capita  and CO2 emission per capita
+## Modeling the Relationship between GDP per capita and CO2 emission per capita
 
-Written Components:
-Present and discuss visualizations of the relationship between the variables.
-Describe the statistical method used – linear regression.
-Present the estimated regression model (in notation).
-Interpret the linear regression coefficients (in context).
-Describe the fit of the regression model (both in table and written format).
+Written Components: Present and discuss visualizations of the relationship between the variables. Describe the statistical method used – linear regression. Present the estimated regression model (in notation). Interpret the linear regression coefficients (in context). Describe the fit of the regression model (both in table and written format).
 
-2.1: Data Visualization 
-  Plot 1: the relationship between the two quantitative variables we are looking at. (aggregate values over all years     for each country)
+### 2.1: Data Visualization
+
+Plot 1: the relationship between the two quantitative variables we are looking at. (aggregate values over all years for each country)
 
 ```{r}
 combined_clean |> 
@@ -217,8 +213,9 @@ combined_clean |>
     y = "Average CO₂ Emissions Per Capita") +
   theme_minimal()
 ```
-  
-  Plot 2: how the relationship from plot 1 changes over time(animated plot)
+
+Plot 2: how the relationship from plot 1 changes over time(animated plot)
+
 ```{r}
 animated_data <- combined_clean |> 
   mutate(gdp = as.numeric(gsub(",", "", gdp)),
@@ -246,12 +243,10 @@ anim_save("avg_gdp_vs_co2_over_time.gif", animation = last_animation())
 
 ```
 
+### 2.2: Linear Regression
 
+Fit a simple linear regression model to the data. To perform your linear regression, you will likely want to summarize your data so you have one x value and one y value per country. You may do this by averaging (or taking the median) across all years, averaging across a subset of years, or picking a year of particular interest ( do the same thing as in plot #1). Make sure you discuss your decision in your written report.
 
-  
-2.2: Linear Regression
-  fit a simple linear regression model to the data. To perform your linear regression, you will likely want to summarize    your data so you have one x value and one y value per country. You may do this by averaging (or taking the median)      across all years, averaging across a subset of years, or picking a year of particular interest ( do the same thing as   in plot #1). Make sure you discuss your decision in your written report.
-  
 ```{r}
 #Average gdp and co2 per country over all years
 my_model <- combined_clean |>
@@ -271,14 +266,10 @@ regression_data <- lm(avg_co2_all_years ~ avg_gdp_all_years, data = my_model)
 tidy(regression_data) |> kable()
 broom::glance(regression_data) |>  kable()
 ```
-  
-  
-2.3: Model Fit
-  Make a nicely formatted table that presents the following:
-  - The variance in the response values. (A)
-  - The variance in the fitted values from your regression model. (B)
-  - The variance in the residuals from your regression model.
-  - The model R2 (B / A)
+
+### 2.3: Model Fit
+
+Make a nicely formatted table that presents the following: - The variance in the response values. (A) - The variance in the fitted values from your regression model. (B) - The variance in the residuals from your regression model. - The model R2 (B / A)
 
 ```{r}
 aug <- augment(regression_data)
@@ -295,7 +286,6 @@ aug |>
   add_header_above(c("Model Fit" = 4),
                    font_size = "large")
 ```
-
 
 ## Cross-Validation
 
