@@ -206,16 +206,40 @@ combined_clean |>
   ggplot(aes(x = avg_gdp, y = avg_co2)) +
   geom_point(color = "steelblue", size = 3) +
   labs(
-    title = "Average CO₂ Emissions vs. Average GDP per Country",
+    title = "Average CO2 Emissions vs. Average GDP per Country",
     x = "Average GDP Per Capita",
     y = "Average CO₂ Emissions Per Capita") +
   theme_minimal()
 ```
   
-  
   Plot 2: how the relationship from plot 1 changes over time(animated plot)
+```{r}
+animated_data <- combined_clean |> 
+  mutate(gdp = as.numeric(gsub(",", "", gdp)),
+         co2_emissions = as.numeric(gsub(",", "", co2_emissions)),
+         year = as.integer(year)) |> 
+  group_by(country, year) |> 
+  summarise(avg_gdp = mean(gdp, na.rm = TRUE),
+            avg_co2 = mean(co2_emissions, na.rm = TRUE)) |> 
+  filter(!is.na(avg_gdp) & !is.na(avg_co2))
+
+animated_plot <- ggplot(animated_data, aes(x = avg_gdp, y = avg_co2)) +
+  geom_point(color = "steelblue", size = 3, alpha = 0.7) +
+  labs(title = "Average CO₂ Emissions vs. Average GDP per Country",
+       subtitle = "Year: {frame_time}",
+       x = "Average GDP Per Capita",
+       y = "Average CO₂ Emissions Per Capita") +
+  theme_minimal() +
+  transition_time(year) +
+  ease_aes('linear')
+
+
+animate(animated_plot, renderer = gifski_renderer(), width = 800, height = 600, fps = 10)
+
+anim_save("avg_gdp_vs_co2_over_time.gif", animation = last_animation())
 
 ```
+
 
 
   
