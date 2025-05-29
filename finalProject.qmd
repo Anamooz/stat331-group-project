@@ -284,7 +284,7 @@ aug |>
                 bootstrap_options = c("striped")) |> 
   add_header_above(c("Variance" = 3, "R\u00B2" = 1)) |> 
   add_header_above(c("Model Fit" = 4),
-                   font_size = "large")
+                   font_size = "x-large")
 ```
 
 ## Cross-Validation
