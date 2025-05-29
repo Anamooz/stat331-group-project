@@ -62,11 +62,9 @@ https://www.iea.org/commentaries/the-relationship-between-growth-in-gdp-and-co2-
 
 ## Data Cleaning
 
-By analyzing the data below, it was determined that all countries were missing CO2 emissions data beyond 2022. Therefore this study will only include data from years 1800 to 2022.
+By analyzing the data below, it was determined that all countries were missing CO2 emissions data beyond 2022. Therefore this study will only include data from years 1800 to 2022 (this drops 15,210 observations).
 
-Additionally, it was determined that the only countries missing CO2 emissions data before 2022 were Monaco and San Marino, so those countries will be dropped from this analysis. Similarly, Liechtenstein is missing much of its GDP data before 2022, so it will also be dropped from the analysis. In total, 15,879 obeservations were dropped.
-
-The plot below shows all countries in the dataset missing either CO2 emissions data or GDP data before 2023.
+Additionally, it was determined that the only countries missing CO2 emissions data before 2022 were Monaco and San Marino, so those countries will be dropped from this analysis. Similarly, Liechtenstein is missing much of its GDP data before 2022, so it will also be dropped from the analysis. These countries totaled 669 observations, so in total 15,879 observations were dropped.
 
 ```{r}
 #| code-fold: true
@@ -134,6 +132,8 @@ oceania <- c(
 ```{r}
 #| warning: false
 #| message: false
+#| code-fold: true
+
 # First, determine if there is a pattern in missing data
 combined_data |> 
   filter(if_any(.cols = everything(),
@@ -175,6 +175,11 @@ combined_data |>
        y = "",
        x = "Year",
        fill = "Missing")
+
+combined_data |> 
+  filter(year >= 2023) |> 
+  summarize("obs_over_2023" = n()) |> 
+  kable()
 
 # Then, remove all observation which contain NA, and all observations beyond 2022.
 combined_clean <- combined_data |> 
