@@ -269,7 +269,7 @@ broom::glance(regression_data) |>  kable()
 
 ### 2.3: Model Fit
 
-Make a nicely formatted table that presents the following: - The variance in the response values. (A) - The variance in the fitted values from your regression model. (B) - The variance in the residuals from your regression model. - The model R2 (B / A)
+An R-squared value of 0.76 means that approximately 76% of the variability in average CO2 emissions can be explained by our model (and therefore by average GDP). This suggests the quality of our model is decent, though 24% of the variability in average CO2 emissions can only be explained through variables outside our model.
 
 ```{r}
 aug <- augment(regression_data)
