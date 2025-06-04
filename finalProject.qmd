@@ -193,7 +193,7 @@ combined_clean <- combined_data |>
 
 Written Components: Present and discuss visualizations of the relationship between the variables. Describe the statistical method used – linear regression. Present the estimated regression model (in notation). Interpret the linear regression coefficients (in context). Describe the fit of the regression model (both in table and written format).
 
-GDP per capita and CO2 emissions have a positive direct relationship; an increase in GDP tends to result in an increase in CO2 emissions. The model we used to describe the trend of the data was linear regression. This was dome by taking an average for both GDP and CO2 emissions over all years and performing linear regression calculations over those values. The R-squared value of 0.76 means that there is a strong trend in similarity between the two variables, and it fits a linear model well. The sigma is the standard deviation of the model. In this context, it represents how much the data deviates from the linear model, or how many outliers exist away from the trend. Our std.deviation of about 1 is quite good given the range of values over which the study is conducted. Overall, the model seems to fit quite well with the data and suggests there does exist a relationship between GDP per capita and CO2 emissions per year.
+GDP per capita and CO2 emissions have a positive direct relationship; an increase in GDP tends to result in an increase in CO2 emissions. The model we used to describe the trend of the data was linear regression. This was done by taking an average for both GDP and CO2 emissions over all years and performing linear regression calculations over those values. The R-squared value of 0.76 means that there is a strong trend in similarity between the two variables, and it fits a linear model well. The sigma is the standard deviation of the model. In this context, it represents how much the data deviates from the linear model, or how many outliers exist away from the trend. Our std.deviation of about 1 is quite good given the range of values over which the study is conducted. Overall, the model seems to fit quite well with the data and suggests there does exist a relationship between GDP per capita and CO2 emissions per year.
 
 ### 2.1: Data Visualization
 
@@ -201,8 +201,12 @@ Plot 1: the relationship between the two quantitative variables we are looking a
 
 ```{r}
 combined_clean |> 
-  mutate(gdp = as.numeric(gsub(",", "", gdp)),
-         co2_emissions = as.numeric(gsub(",", "", co2_emissions))) |> 
+  mutate(
+  gdp = case_when(
+    grepl("k$", gdp, ignore.case = TRUE) ~ as.numeric(sub("k", "", gdp, ignore.case = TRUE)) * 1000,
+    TRUE ~ as.numeric(gsub(",", "", gdp))
+  )) |>
+  mutate(co2_emissions = as.numeric(gsub(",", "", co2_emissions))) |> 
   group_by(country) |> 
   summarise(avg_gdp = mean(gdp, na.rm = TRUE),
             avg_co2 = mean(co2_emissions, na.rm = TRUE)) |> 
@@ -220,9 +224,13 @@ Plot 2: how the relationship from plot 1 changes over time(animated plot)
 
 ```{r}
 animated_data <- combined_clean |> 
-  mutate(gdp = as.numeric(gsub(",", "", gdp)),
-         co2_emissions = as.numeric(gsub(",", "", co2_emissions)),
-         year = as.integer(year)) |> 
+    mutate(
+  gdp = case_when(
+    grepl("k$", gdp, ignore.case = TRUE) ~ as.numeric(sub("k", "", gdp, ignore.case = TRUE)) * 1000,
+    TRUE ~ as.numeric(gsub(",", "", gdp))
+  )) |>
+  mutate(co2_emissions = as.numeric(gsub(",", "", co2_emissions))) |> 
+  mutate(year = as.integer(year)) |> 
   group_by(country, year) |> 
   summarise(avg_gdp = mean(gdp, na.rm = TRUE),
             avg_co2 = mean(co2_emissions, na.rm = TRUE)) |> 
