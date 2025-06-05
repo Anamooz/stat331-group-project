@@ -304,7 +304,7 @@ ggplot(residual_data, aes(x = fitted, y = residuals)) +
 
 ### 2.3: Model Fit
 
-An R-squared value of 0.76 means that approximately 76% of the variability in average CO2 emissions can be explained by our model, and therefore by average GDP. This suggests the quality of our model is decent, though 24% of the variability in average CO2 emissions can only be explained through variables outside our model.
+An R-squared value of 0.84 means that approximately 84% of the variability in average CO2 emissions can be explained by our model, and therefore by average GDP. This suggests the quality of our model is decent, though 24% of the variability in average CO2 emissions can only be explained through variables outside our model.
 
 ```{r}
 aug <- augment(regression_data)
