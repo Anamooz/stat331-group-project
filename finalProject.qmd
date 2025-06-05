@@ -332,16 +332,24 @@ oneIteration <- function (dataset, k){
   trained_fit <- lm(log_co2 ~ log_gdp, data = train_data)
   
   test_preds <- predict(trained_fit, newdata = test_data)
+  print(test_preds)
   
-  return(var(test_preds)/var(test_data$log_co2))
+  return((var(test_preds))/(var(test_data$log_co2)))
 }
 
 n <- nrow(my_model)
 set.seed(57482)
-my_model |> 
-  mutate(fold = sample(rep_len(1:10, length.out = n),
-                       size = n)) |> 
-  group_by(fold)
+
+k <- 10
+vec <- 1:k
+my_model <- my_model |> 
+  mutate(fold = sample(rep_len(1:k, length.out = n),
+                       size = n)) 
+
+map(vec, ~ oneIteration(my_model, .x))
+
+
+  
 
 ```
 
