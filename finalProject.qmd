@@ -324,6 +324,28 @@ aug |>
 
 ## Cross-Validation
 
+```{r}
+oneIteration <- function (dataset, k){
+  train_data <- filter(dataset, fold == k)
+  test_data <- filter(dataset, fold != k)
+  
+  trained_fit <- lm(log_co2 ~ log_gdp, data = train_data)
+  
+  test_preds <- predict(trained_fit, newdata = test_data)
+  
+  return(var(test_preds)/var(test_data$log_co2))
+}
+
+n <- nrow(my_model)
+set.seed(57482)
+my_model |> 
+  mutate(fold = sample(rep_len(1:10, length.out = n),
+                       size = n)) |> 
+  group_by(fold)
+
+```
+
+
 ## Conclusion
 
 **Citations**
