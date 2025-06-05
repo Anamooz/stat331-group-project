@@ -211,7 +211,9 @@ combined_clean |>
   summarise(avg_gdp = mean(gdp, na.rm = TRUE),
             avg_co2 = mean(co2_emissions, na.rm = TRUE)) |> 
   filter(!is.na(avg_gdp) & !is.na(avg_co2)) |> 
-  ggplot(aes(x = avg_gdp, y = avg_co2)) +
+  filter(avg_gdp > 0, avg_co2 > 0) |>  # required for log
+  mutate(log_gdp = log(avg_gdp), log_co2 = log(avg_co2)) |> #log transformation
+  ggplot(aes(x = log_gdp, y = log_co2)) +
   geom_point(color = "steelblue", size = 3) +
   labs(
     title = "Average CO2 Emissions vs. Average GDP per Country",
@@ -234,9 +236,11 @@ animated_data <- combined_clean |>
   group_by(country, year) |> 
   summarise(avg_gdp = mean(gdp, na.rm = TRUE),
             avg_co2 = mean(co2_emissions, na.rm = TRUE)) |> 
-  filter(!is.na(avg_gdp) & !is.na(avg_co2))
+  filter(!is.na(avg_gdp) & !is.na(avg_co2)) |>
+  filter(avg_gdp > 0, avg_co2 > 0) |>  # required for log
+  mutate(log_gdp = log(avg_gdp), log_co2 = log(avg_co2)) #log transformation
 
-animated_plot <- ggplot(animated_data, aes(x = avg_gdp, y = avg_co2)) +
+animated_plot <- ggplot(animated_data, aes(x = log_gdp, y = log_co2)) +
   geom_point(color = "steelblue", size = 3, alpha = 0.7) +
   labs(title = "Average CO₂ Emissions vs. Average GDP per Country",
        subtitle = "Year: {frame_time}",
@@ -269,12 +273,33 @@ my_model <- combined_clean |>
   )) |>
   mutate(co2_emissions = as.numeric(co2_emissions)) |>
   summarise(avg_gdp_all_years = mean(gdp, na.rm = TRUE),
-            avg_co2_all_years = mean(co2_emissions, na.rm = TRUE))
+            avg_co2_all_years = mean(co2_emissions, na.rm = TRUE)) |>
+  filter(avg_gdp_all_years > 0, avg_co2_all_years > 0) |>  # required for log
+  mutate(log_gdp = log(avg_gdp_all_years), log_co2 = log(avg_co2_all_years)) #linear transformation
 
-regression_data <- lm(avg_co2_all_years ~ avg_gdp_all_years, data = my_model)
+regression_data <- lm(log_co2 ~ log_gdp, data = my_model)
 
 tidy(regression_data) |> kable()
 broom::glance(regression_data) |>  kable()
+
+# Create a dataframe with fitted values and residuals
+residual_data <- my_model |>
+  mutate(
+    fitted = fitted(regression_data),
+    residuals = resid(regression_data)
+  )
+
+# Plot residuals vs. fitted values to check linearity
+ggplot(residual_data, aes(x = fitted, y = residuals)) +
+  geom_point(color = "darkred", size = 3) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
+  labs(
+    title = "Residual Plot",
+    x = "Fitted Values (Predicted CO₂ Emissions)",
+    y = "Residuals"
+  ) +
+  theme_minimal()
+
 ```
 
 ### 2.3: Model Fit
@@ -284,7 +309,7 @@ An R-squared value of 0.76 means that approximately 76% of the variability in av
 ```{r}
 aug <- augment(regression_data)
 aug |> 
-  summarize(var_response = var(avg_co2_all_years),
+  summarize(var_response = var(log_co2),
             var_fitted = var(.fitted),
             var_resid = var(.resid),
             R_squared = var_fitted/var_response) |> 
