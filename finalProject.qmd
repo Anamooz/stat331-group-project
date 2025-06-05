@@ -324,6 +324,16 @@ aug |>
 
 ## Cross-Validation
 
+```{r}
+n <- nrow(my_model)
+set.seed(57482)
+my_model |> 
+  mutate(fold = sample(rep_len(1:10, length.out = n),
+                       size = n)) |> 
+  group_by(fold)
+```
+
+
 ## Conclusion
 
 **Citations**
