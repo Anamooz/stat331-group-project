@@ -325,16 +325,18 @@ aug |>
 ## Cross-Validation
 
 ```{r}
+
 oneIteration <- function (dataset, k){
-  train_data <- filter(dataset, fold == k)
-  test_data <- filter(dataset, fold != k)
+  test_data <- filter(dataset, fold == k)
+  train_data <- filter(dataset, fold != k)
   
   trained_fit <- lm(log_co2 ~ log_gdp, data = train_data)
   
   test_preds <- predict(trained_fit, newdata = test_data)
-  print(test_preds)
   
-  return((var(test_preds))/(var(test_data$log_co2)))
+  residual <- test_data$log_co2 - test_preds
+  
+  return(1 - (var(residual))/(var(test_data$log_co2)))
 }
 
 n <- nrow(my_model)
@@ -346,11 +348,23 @@ my_model <- my_model |>
   mutate(fold = sample(rep_len(1:k, length.out = n),
                        size = n)) 
 
-map(vec, ~ oneIteration(my_model, .x))
+cv <- map_dbl(vec, ~ oneIteration(my_model, .x))
+mean(cv)
 
 
-  
+```
+```{r}
+#Expression() from geeksforgeeks.org
+df <- data.frame(k_fold = vec, r_2 = cv)
 
+df |>
+  ggplot(aes(x = k_fold, y = r_2)) +
+  geom_point() +
+  labs(title = "Distribution of R Squared Values vs. K Folds", y = expression("r" ^ 2 * " Values"), x = "K  Fold") +
+  geom_hline(yintercept = mean(cv),
+             linetype = "dashed",
+             size = 0.5) +
+  scale_x_continuous(limits = c(1, 10), breaks = seq(1, 10, 1))
 ```
 
 
