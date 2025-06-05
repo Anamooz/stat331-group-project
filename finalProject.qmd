@@ -335,6 +335,14 @@ oneIteration <- function (dataset, k){
   
   return(var(test_preds)/var(test_data$log_co2))
 }
+
+n <- nrow(my_model)
+set.seed(57482)
+my_model |> 
+  mutate(fold = sample(rep_len(1:10, length.out = n),
+                       size = n)) |> 
+  group_by(fold)
+
 ```
 
 
