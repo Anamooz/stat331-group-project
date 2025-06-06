@@ -308,12 +308,13 @@ ggplot(residual_data, aes(x = fitted, y = residuals)) +
 An R-squared value of 0.84 means that approximately 84% of the variability in average CO2 emissions can be explained by our model, and therefore by average GDP. This suggests the quality of our model is decent, though 24% of the variability in average CO2 emissions can only be explained through variables outside our model.
 
 ```{r}
-aug <- augment(regression_data)
-aug |> 
+aug <- augment(regression_data) |> 
   summarize(var_response = var(log_co2),
             var_fitted = var(.fitted),
             var_resid = var(.resid),
-            R_squared = var_fitted/var_response) |> 
+            R_squared = var_fitted/var_response)
+
+aug |> 
   kable(col.names  = c("Response (A)", "Fitted (B)", "Residuals", "(B/A)"),
         align     = "c") |> 
   kable_styling(full_width = F,
@@ -361,11 +362,34 @@ df <- data.frame(k_fold = vec, r_2 = cv)
 df |>
   ggplot(aes(x = k_fold, y = r_2)) +
   geom_point() +
-  labs(title = "Distribution of R Squared Values vs. K Folds", y = expression("r" ^ 2 * " Values"), x = "K  Fold") +
+  labs(title = expression("Distribution of R" ^ 2 * " Values vs. K Folds"),
+       subtitle = expression("R" ^ 2 * " Values"),
+       x = "K Fold Number",
+       y = "") +
   geom_hline(yintercept = mean(cv),
              linetype = "dashed",
-             size = 0.5) +
-  scale_x_continuous(limits = c(1, 10), breaks = seq(1, 10, 1))
+             size = 0.5,
+             color = "black") +
+  geom_hline(yintercept = aug$R_squared,
+             linetype = "dashed",
+             size = 0.5,
+             color = "blue") +
+  annotate(
+    "text",
+    x = 9.5,
+    y = mean(cv) + 0.01,
+    label = "k-fold average",
+    color = "black"
+  ) +
+  annotate(
+    "text",
+    x = 9.5,
+    y = aug$R_squared + 0.01,
+    label = "original model fit",
+    color = "blue"
+  ) +
+  scale_x_continuous(limits = c(1, 10), breaks = seq(1, 10, 1)) +
+  theme_minimal()
 ```
 
 
