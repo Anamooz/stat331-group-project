@@ -195,8 +195,6 @@ From our findings, GDP per capita and CO2 emissions have a positive direct relat
 
 ### 2.1: Data Visualization
 
-Plot 1: The relationship between the two quantitative variables we are looking at. (aggregate values over all years for each country)
-
 ```{r}
 combined_clean |> 
   mutate(
@@ -219,8 +217,7 @@ combined_clean |>
     y = "Average CO₂ Emissions Per Capita") +
   theme_minimal()
 ```
-
-Plot 2: How the relationship from plot 1 changes over time(animated plot)
+Figure 1: The relationship between avg GDP per capita and avg CO2 per capita (Aggregate values over all years for each country). Very linear relationship between the two.
 
 ```{r}
 animated_data <- combined_clean |> 
@@ -255,6 +252,7 @@ animated_plot <- ggplot(animated_data, aes(x = log_gdp, y = log_co2)) +
 animate(animated_plot, nframes = 100, fps = 10)
 
 ```
+Figure 2: Animated version of Fig. 1, over the full timescale of the Gapminder Dataset (1800-2022).
 
 ### 2.2: Linear Regression
 
@@ -301,6 +299,8 @@ ggplot(residual_data, aes(x = fitted, y = residuals)) +
   theme_minimal()
 
 ```
+Figure 3: residuals vs fitted plot of CO2 emissions. Some fanning is present, but is not too bad. 
+
 
 ### 2.3: Model Fit
 
@@ -390,7 +390,7 @@ df |>
   scale_x_continuous(limits = c(1, 10), breaks = seq(1, 10, 1)) +
   theme_minimal()
 ```
-
+Figure 4: K fold plot showing that the k-fold average is very close to the original model fit, meaning no over or under fitting has occured. 
 
 ## Conclusion
 
