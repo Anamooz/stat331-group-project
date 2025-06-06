@@ -295,8 +295,9 @@ ggplot(residual_data, aes(x = fitted, y = residuals)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
   labs(
     title = "Residual Plot",
-    x = "Fitted Values (Predicted CO₂ Emissions)",
-    y = "Residuals"
+    subtitle = "Residuals",
+    x = expression("Fitted Values (Predicted " * CO[2] *" Emissions)"),
+    y = ""
   ) +
   theme_minimal()
 
