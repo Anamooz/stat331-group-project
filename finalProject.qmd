@@ -136,6 +136,8 @@ oceania <- c(
 #| warning: false
 #| message: false
 #| code-fold: true
+#| echo: true
+#| results: false
 
 # First, determine if there is a pattern in missing data
 combined_data |> 
