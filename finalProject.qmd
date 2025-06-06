@@ -53,6 +53,8 @@ combined_data <- full_join(gpd_long, co2_long, by = c("country", "year")) |>
 
 The data we are exploring is the GDP per capita of every country in the world from 1800 projected until 2100 in 2017 international dollars, and the CO2 emissions per capita of every country in the world from 1800 until 2022 in tonnes per capita.
 
+Understanding the relationship between economic growth and environmental impact is essential in today's society. In this report we explore the association between gross domestic product (GDP) per capita and carbon dioxide (CO₂) emissions per capita across the world over time. By analyzing these variables, we aim to look at whether higher levels of income are linked to greater environmental costs, and to what extent economic development correlates with carbon output. Understanding this trend could help influence policy making into the future as we aim to curb our carbon emissions and preserve our planet. 
+
 https://www.iea.org/commentaries/the-relationship-between-growth-in-gdp-and-co2-has-loosened-it-needs-to-be-cut-completely
 
 **Hypothesis:** Based on our initial research, we hypothesize that most countries on this list will have a direct linear relationship for most of time, but will have an inverse linear trend toward more recent years. This, we posit, is due to the fact that more countries have begun adopting clean power generation more widely that previous decades and phasing out fossil fuels. Therefore, GDP per capita continues to grow without having to burn so much CO2.
