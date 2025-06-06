@@ -148,7 +148,7 @@ combined_data |>
                    ~ any(is.na(.)))) |> 
   kable()
 
-combined_data |> 
+dc_plot <- combined_data |> 
   mutate(year = as.numeric(year),
          country = fct(country),
 #         region = fct_collapse(.f = country,
