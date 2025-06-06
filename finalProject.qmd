@@ -258,7 +258,7 @@ animated_plot <- ggplot(animated_data, aes(x = log_gdp, y = log_co2)) +
 # animate(animated_plot, renderer = gifski_renderer(), width = 800, height = 600, fps = 10)
 # anim_save("avg_gdp_vs_co2_over_time.gif", animation = last_animation())
 
-animated_plot
+animate(animated_plot, nframes = 100, fps = 10)
 
 ```
 
