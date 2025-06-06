@@ -132,6 +132,8 @@ oceania <- c(
 #| warning: false
 #| message: false
 #| code-fold: true
+#| echo: true
+#| results: false
 
 # First, determine if there is a pattern in missing data
 combined_data |> 
@@ -142,7 +144,7 @@ combined_data |>
                    ~ any(is.na(.)))) |> 
   kable()
 
-combined_data |> 
+dc_plot <- combined_data |> 
   mutate(year = as.numeric(year),
          country = fct(country),
 #         region = fct_collapse(.f = country,
@@ -238,18 +240,19 @@ animated_data <- combined_clean |>
 
 animated_plot <- ggplot(animated_data, aes(x = log_gdp, y = log_co2)) +
   geom_point(color = "steelblue", size = 3, alpha = 0.7) +
-  labs(title = "Average CO₂ Emissions vs. Average GDP per Country",
+  labs(title = "Average CO2 Emissions vs. Average GDP per Country",
        subtitle = "Year: {frame_time}",
-       x = "Average GDP Per Capita",
-       y = "Average CO₂ Emissions Per Capita") +
+       x = "Log of Average GDP Per Capita",
+       y = "Log of Average CO2 Emissions Per Capita") +
   theme_minimal() +
   transition_time(year) +
   ease_aes('linear')
 
 
-animate(animated_plot, renderer = gifski_renderer(), width = 800, height = 600, fps = 10)
+# animate(animated_plot, renderer = gifski_renderer(), width = 800, height = 600, fps = 10)
+# anim_save("avg_gdp_vs_co2_over_time.gif", animation = last_animation())
 
-anim_save("avg_gdp_vs_co2_over_time.gif", animation = last_animation())
+animate(animated_plot, nframes = 100, fps = 10)
 
 ```
 
