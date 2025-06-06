@@ -1,10 +1,11 @@
 ---
-title: "Stat 331 Group Project"
+title: "The Relationship of GDP per Capita and CO2 Emissions"
 author: "Tevan Kim, Will Ton, Eli Newman, Trycia Vong"
 format: 
   html:
     embed-resources: true
     code-tools: true
+    code-fold: true
     toc: true
 editor: source
 execute: 
@@ -28,9 +29,10 @@ gdp <- read_csv("GDP_data.csv", col_types = cols(.default = "c"))
 co2 <- read_csv("CO2_Data.csv", col_types = cols(.default = "c"))
 ```
 
-## Combine data into long format and combine
+
 
 ```{r}
+# Combine data into long format and combine
 gpd_long <- gdp |> 
   pivot_longer(cols = -country,
                names_to = "year",
@@ -49,25 +51,19 @@ combined_data <- full_join(gpd_long, co2_long, by = c("country", "year")) |>
 
 ## Introduction
 
-\[Description of data\].
-
 The data we are exploring is the GDP per capita of every country in the world from 1800 projected until 2100 in 2017 international dollars, and the CO2 emissions per capita of every country in the world from 1800 until 2022 in tonnes per capita.
 
 Understanding the relationship between economic growth and environmental impact is essential in today's society. In this report we explore the association between gross domestic product (GDP) per capita and carbon dioxide (CO₂) emissions per capita across the world over time. By analyzing these variables, we aim to look at whether higher levels of income are linked to greater environmental costs, and to what extent economic development correlates with carbon output. Understanding this trend could help influence policy making into the future as we aim to curb our carbon emissions and preserve our planet. 
 
-https://www.iea.org/commentaries/the-relationship-between-growth-in-gdp-and-co2-has-loosened-it-needs-to-be-cut-completely
-
 **Hypothesis:** Based on our initial research, we hypothesize that most countries on this list will have a direct linear relationship for most of time, but will have an inverse linear trend toward more recent years. This, we posit, is due to the fact that more countries have begun adopting clean power generation more widely that previous decades and phasing out fossil fuels. Therefore, GDP per capita continues to grow without having to burn so much CO2.
-
-```{r}
-
-```
 
 ## Data Cleaning
 
 By analyzing the data below, it was determined that all countries were missing CO2 emissions data beyond 2022. Therefore this study will only include data from years 1800 to 2022 (this drops 15,210 observations).
 
 Additionally, it was determined that the only countries missing CO2 emissions data before 2022 were Monaco and San Marino, so those countries will be dropped from this analysis. Similarly, Liechtenstein is missing much of its GDP data before 2022, so it will also be dropped from the analysis. These countries totaled 669 observations, so in total 15,879 observations were dropped.
+
+For simplicity, we have decided to summarize our data by averaging the GDP per capita and CO2 emissions for all years by country.
 
 ```{r}
 #| code-fold: true
@@ -193,13 +189,11 @@ combined_clean <- combined_data |>
 
 ## Modeling the Relationship between GDP per capita and CO2 emission per capita
 
-Written Components: Present and discuss visualizations of the relationship between the variables. Describe the statistical method used – linear regression. Present the estimated regression model (in notation). Interpret the linear regression coefficients (in context). Describe the fit of the regression model (both in table and written format).
-
-GDP per capita and CO2 emissions have a positive direct relationship; an increase in GDP tends to result in an increase in CO2 emissions. The model we used to describe the trend of the data was linear regression. This was done by taking an average for both GDP and CO2 emissions over all years and performing linear regression calculations over those values. The R-squared value of 0.76 means that there is a strong trend in similarity between the two variables, and it fits a linear model well. The sigma is the standard deviation of the model. In this context, it represents how much the data deviates from the linear model, or how many outliers exist away from the trend. Our std.deviation of about 1 is quite good given the range of values over which the study is conducted. Overall, the model seems to fit quite well with the data and suggests there does exist a relationship between GDP per capita and CO2 emissions per year.
+From our findings, GDP per capita and CO2 emissions have a positive direct relationship; an increase in GDP tends to result in an increase in CO2 emissions. The model we used to describe the trend of the data was linear regression. This was done by taking an average for both GDP and CO2 emissions over all years and performing linear regression calculations over those values. The R-squared value of 0.76 means that there is a strong trend in similarity between the two variables, and it fits a linear model well. The sigma is the standard deviation of the model. In this context, it represents how much the data deviates from the linear model, or how many outliers exist away from the trend. Our std.deviation of about 1 is quite good given the range of values over which the study is conducted. Overall, the model seems to fit quite well with the data and suggests there does exist a relationship between GDP per capita and CO2 emissions per year.
 
 ### 2.1: Data Visualization
 
-Plot 1: the relationship between the two quantitative variables we are looking at. (aggregate values over all years for each country)
+Plot 1: The relationship between the two quantitative variables we are looking at. (aggregate values over all years for each country)
 
 ```{r}
 combined_clean |> 
@@ -224,7 +218,7 @@ combined_clean |>
   theme_minimal()
 ```
 
-Plot 2: how the relationship from plot 1 changes over time(animated plot)
+Plot 2: How the relationship from plot 1 changes over time(animated plot)
 
 ```{r}
 animated_data <- combined_clean |> 
@@ -261,10 +255,9 @@ anim_save("avg_gdp_vs_co2_over_time.gif", animation = last_animation())
 
 ### 2.2: Linear Regression
 
-Fit a simple linear regression model to the data. To perform your linear regression, you will likely want to summarize your data so you have one x value and one y value per country. You may do this by averaging (or taking the median) across all years, averaging across a subset of years, or picking a year of particular interest ( do the same thing as in plot #1). Make sure you discuss your decision in your written report.
-
 ```{r}
 #Average gdp and co2 per country over all years
+#used grepl and gsub from chatgpt, https://chatgpt.com/share/6837b5d4-9aa0-8009-9faf-83f213beced7
 my_model <- combined_clean |>
   group_by(country) |> 
   #turns 12.3k to 12300 or 12k to 12000
@@ -292,6 +285,7 @@ residual_data <- my_model |>
   )
 
 # Plot residuals vs. fitted values to check linearity
+#Plot made from chatgpt, https://chatgpt.com/share/68436ab0-9880-8009-8962-fbc0aeeff57f
 ggplot(residual_data, aes(x = fitted, y = residuals)) +
   geom_point(color = "darkred", size = 3) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
@@ -397,8 +391,9 @@ df |>
 
 ## Conclusion
 
+
+
 **Citations**
 
-test
+https://www.iea.org/commentaries/the-relationship-between-growth-in-gdp-and-co2-has-loosened-it-needs-to-be-cut-completely
 
-https://chatgpt.com/share/6837b5d4-9aa0-8009-9faf-83f213beced7
