@@ -66,69 +66,6 @@ Additionally, it was determined that the only countries missing CO2 emissions da
 For simplicity, we have decided to summarize our data by averaging the GDP per capita and CO2 emissions for all years by country.
 
 ```{r}
-#| code-fold: true
-
-# Group Countries into larger regions
-europe <- c(
-  "Albania", "Andorra", "Austria", "Belarus", "Belgium",
-  "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus",
-  "Czech Republic", "Denmark", "Estonia", "Finland", "France",
-  "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy",
-  "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg",
-  "Malta", "Moldova", "Monaco", "Montenegro", "Netherlands",
-  "North Macedonia", "Norway", "Poland", "Portugal", "Romania",
-  "Russia", "San Marino", "Serbia", "Slovakia", "Slovenia",
-  "Spain", "Sweden", "Switzerland", "Ukraine", "United Kingdom",
-  "Vatican City","UK","Slovak Republic"
-)
-
-africa <- c(
-  "Algeria","Angola","Benin","Botswana","Burkina Faso","Burundi",
-  "Cabo Verde","Cameroon","Central African Republic","Chad",
-  "Comoros","Congo, Republic of","Congo, Democratic Republic of",
-  "Côte d'Ivoire","Djibouti","Egypt","Equatorial Guinea","Eritrea",
-  "Eswatini","Ethiopia","Gabon","Gambia","Ghana","Guinea",
-  "Guinea-Bissau","Kenya","Lesotho","Liberia","Libya","Madagascar",
-  "Malawi","Mali","Mauritania","Mauritius","Morocco","Mozambique",
-  "Namibia","Niger","Nigeria","Rwanda","São Tomé and Príncipe",
-  "Senegal","Seychelles","Sierra Leone","Somalia","South Africa",
-  "South Sudan","Sudan","Tanzania","Togo","Tunisia","Uganda","Zambia","Zimbabwe",
-  "Cote d'Ivoire","Congo, Dem. Rep.","Cape Verde","Sao Tome and Principe","Congo, Rep."
-)
-
-asia <- c(
-  "Afghanistan","Armenia","Azerbaijan","Bahrain","Bangladesh","Bhutan",
-  "Brunei","Cambodia","China","Cyprus","Georgia","India","Indonesia",
-  "Iran","Iraq","Israel","Japan","Jordan","Kazakhstan","Kuwait","Kyrgyzstan",
-  "Laos","Lebanon","Malaysia","Maldives","Mongolia","Myanmar","Nepal",
-  "North Korea","Oman","Pakistan","Palestine","Philippines","Qatar",
-  "Saudi Arabia","Singapore","South Korea","Sri Lanka","Syria","Tajikistan",
-  "Thailand","Timor-Leste","Turkey","Turkmenistan","UAE","Uzbekistan","Vietnam","Yemen",
-  "Hong Kong, China","Kyrgyz Republic","Lao","Taiwan"
-)
-
-north_america <- c(
-  "Antigua and Barbuda","Bahamas","Barbados","Belize","Canada",
-  "Costa Rica","Cuba","Dominica","Dominican Republic","El Salvador",
-  "Grenada","Guatemala","Haiti","Honduras","Jamaica","Mexico",
-  "Nicaragua","Panama","Saint Kitts and Nevis","Saint Lucia",
-  "Saint Vincent and the Grenadines","Trinidad and Tobago","United States","USA"
-)
-
-south_america <- c(
-  "Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador",
-  "Guyana","Paraguay","Peru","Suriname","Uruguay","Venezuela",
-  "St. Kitts and Nevis","St. Lucia","St. Vincent and the Grenadines"
-)
-
-oceania <- c(
-  "Australia","Fiji","Kiribati","Marshall Islands","Micronesia",
-  "Nauru","New Zealand","Palau","Papua New Guinea","Samoa",
-  "Solomon Islands","Tonga","Tuvalu","Vanuatu","Micronesia, Fed. Sts."
-)
-```
-
-```{r}
 #| warning: false
 #| message: false
 #| code-fold: true
@@ -191,7 +128,7 @@ combined_clean <- combined_data |>
 
 ## Modeling the Relationship between GDP per capita and CO2 emission per capita
 
-  From our findings, GDP per capita and CO2 emissions have a positive direct relationship; an increase in GDP tends to result in an increase in CO2 emissions. The model we used to describe the trend of the data was linear regression. This was done by taking an average for both GDP and CO2 emissions over all years and performing linear regression calculations over those values. The R-squared value of 0.76 means that there is a strong trend in similarity between the two variables, and it fits a linear model well. The sigma is the standard deviation of the model. In this context, it represents how much the data deviates from the linear model, or how many outliers exist away from the trend. Our std.deviation of about 1 is quite good given the range of values over which the study is conducted. Overall, the model seems to fit quite well with the data and suggests there does exist a relationship between GDP per capita and CO2 emissions per year.
+  From our findings, GDP per capita and CO2 emissions have a positive direct relationship; an increase in GDP tends to result in an increase in CO2 emissions. At first this relationship looked non-linear, so a log transformation was applied to the GDP and CO2 variables. This transformation made the trend much more linear. The model we used to describe the trend of the data was linear regression. This was done by taking an average for both GDP and CO2 emissions over all years and performing linear regression calculations over those values. The R-squared value of 0.76 means that there is a strong trend in similarity between the two variables, and it fits a linear model well. The sigma is the standard deviation of the model. In this context, it represents how much the data deviates from the linear model, or how many outliers exist away from the trend. Our std.deviation of about 1 is quite good given the range of values over which the study is conducted. Overall, the model seems to fit quite well with the data and suggests there does exist a relationship between GDP per capita and CO2 emissions per year.
 
 ### 2.1: Data Visualization
 We start by cleaning our data to get only the key values of interest: GDP and CO2 emissions for each year and for each country. This allows us to easily transition into plotting our data as a nice visual representation as shown below.
@@ -214,11 +151,11 @@ combined_clean |>
   geom_point(color = "steelblue", size = 3) +
   labs(
     title = "Average CO2 Emissions vs. Average GDP per Country",
-    x = "Average GDP Per Capita",
-    y = "Average CO₂ Emissions Per Capita") +
+    x = "Log of the Average GDP Per Capita",
+    y = "Log of the Average CO₂ Emissions Per Capita") +
   theme_minimal()
 ```
-Figure 1: The relationship between avg GDP per capita and avg CO2 per capita (Aggregate values over all years for each country). Very linear relationship between the two.
+Figure 1: The relationship between log of avg GDP per capita and log of avg CO2 per capita (Aggregate values over all years for each country). Very linear relationship between the two.
 
 ```{r}
 animated_data <- combined_clean |> 
