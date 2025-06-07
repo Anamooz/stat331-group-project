@@ -194,6 +194,7 @@ combined_clean <- combined_data |>
 From our findings, GDP per capita and CO2 emissions have a positive direct relationship; an increase in GDP tends to result in an increase in CO2 emissions. The model we used to describe the trend of the data was linear regression. This was done by taking an average for both GDP and CO2 emissions over all years and performing linear regression calculations over those values. The R-squared value of 0.76 means that there is a strong trend in similarity between the two variables, and it fits a linear model well. The sigma is the standard deviation of the model. In this context, it represents how much the data deviates from the linear model, or how many outliers exist away from the trend. Our std.deviation of about 1 is quite good given the range of values over which the study is conducted. Overall, the model seems to fit quite well with the data and suggests there does exist a relationship between GDP per capita and CO2 emissions per year.
 
 ### 2.1: Data Visualization
+We start by cleaning our data to get only the key values of interest: GDP and CO2 emissions for each year and for each country. This allows us to easily transition into plotting our data as a nice visual representation as shown below.
 
 ```{r}
 combined_clean |> 
@@ -255,6 +256,8 @@ animate(animated_plot, nframes = 100, fps = 10)
 Figure 2: Animated version of Fig. 1, over the full timescale of the Gapminder Dataset (1800-2022).
 
 ### 2.2: Linear Regression
+
+Once fully cleaned, we then fit our data to a linear model to test our hypothesis of a positive trend over time. This is accomplished by guessing a linear fit to our average data points and showing that the trendline agrees with the change in the data over time.
 
 ```{r}
 #Average gdp and co2 per country over all years
