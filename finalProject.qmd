@@ -194,8 +194,7 @@ combined_clean <- combined_data |>
   From our findings, GDP per capita and CO2 emissions have a positive direct relationship; an increase in GDP tends to result in an increase in CO2 emissions. The model we used to describe the trend of the data was linear regression. This was done by taking an average for both GDP and CO2 emissions over all years and performing linear regression calculations over those values. The R-squared value of 0.76 means that there is a strong trend in similarity between the two variables, and it fits a linear model well. The sigma is the standard deviation of the model. In this context, it represents how much the data deviates from the linear model, or how many outliers exist away from the trend. Our std.deviation of about 1 is quite good given the range of values over which the study is conducted. Overall, the model seems to fit quite well with the data and suggests there does exist a relationship between GDP per capita and CO2 emissions per year.
 
 ### 2.1: Data Visualization
-
-Plot 1: The relationship between the two quantitative variables we are looking at. (aggregate values over all years for each country)
+We start by cleaning our data to get only the key values of interest: GDP and CO2 emissions for each year and for each country. This allows us to easily transition into plotting our data as a nice visual representation as shown below.
 
 ```{r}
 combined_clean |> 
@@ -219,8 +218,7 @@ combined_clean |>
     y = "Average CO₂ Emissions Per Capita") +
   theme_minimal()
 ```
-
-Plot 2: How the relationship from plot 1 changes over time(animated plot)
+Figure 1: The relationship between avg GDP per capita and avg CO2 per capita (Aggregate values over all years for each country). Very linear relationship between the two.
 
 ```{r}
 animated_data <- combined_clean |> 
@@ -255,8 +253,11 @@ animated_plot <- ggplot(animated_data, aes(x = log_gdp, y = log_co2)) +
 animate(animated_plot, nframes = 100, fps = 10)
 
 ```
+Figure 2: Animated version of Fig. 1, over the full timescale of the Gapminder Dataset (1800-2022).
 
 ### 2.2: Linear Regression
+
+Once fully cleaned, we then fit our data to a linear model to test our hypothesis of a positive trend over time. This is accomplished by guessing a linear fit to our average data points and showing that the trendline agrees with the change in the data over time.
 
 ```{r}
 #Average gdp and co2 per country over all years
@@ -301,6 +302,8 @@ ggplot(residual_data, aes(x = fitted, y = residuals)) +
   theme_minimal()
 
 ```
+Figure 3: residuals vs fitted plot of CO2 emissions. Some fanning is present, but is not too bad. 
+
 
 ### 2.3: Model Fit
 
@@ -324,6 +327,7 @@ aug |>
 ```
 
 ## Cross-Validation
+To prove our model can work for a variety of test data sets, we performed k-fold cross validation to prove this. This was done by randomly assigning data points into k number of groups, where k, in this study, is 10. From there, we reserve one of the groups as a test dataset while the nine others are used to train a linear model with which we test against the test data. After performing tests k times, we averaged the R2 values to see if the R2 of our original linear model is close. For this study, there was only a difference of about 0.01, which means the linear model is successfully validated.
 
 ```{r}
 
@@ -390,7 +394,7 @@ df |>
   scale_x_continuous(limits = c(1, 10), breaks = seq(1, 10, 1)) +
   theme_minimal()
 ```
-
+Figure 4: K fold plot showing that the k-fold average is very close to the original model fit, meaning no over or under fitting has occured. 
 
 ## Conclusion
 
