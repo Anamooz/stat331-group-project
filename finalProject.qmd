@@ -194,7 +194,7 @@ Figure 2: Animated version of Fig. 1, over the full timescale of the Gapminder D
 
 ### 2.2: Linear Regression
 
-Once fully cleaned, we then fit our data to a linear model to test our hypothesis of a positive trend over time. This is accomplished by guessing a linear fit to our average data points and showing that the trendline agrees with the change in the data over time.
+Once fully cleaned, we then fit our data to a linear model to test our hypothesis of a positive trend over time (Fig 3). This is accomplished by guessing a linear fit to our average data points and showing that the trendline agrees with the change in the data over time.
 
 ```{r}
 #Average gdp and co2 per country over all years
@@ -244,7 +244,7 @@ Figure 3: residuals vs fitted plot of CO2 emissions. Some fanning is present, bu
 
 ### 2.3: Model Fit
 
-  An R-squared value of 0.84 means that approximately 84% of the variability in average CO2 emissions can be explained by our model, and therefore by average GDP. This suggests the quality of our model is decent, though 24% of the variability in average CO2 emissions is due to other factors not captured in our model.
+  Our log transformed model gave us an R-squared value of 0.84 meaning that approximately 84% of the variability in average CO2 emissions can be explained by average GDP. This suggests the quality of our model is good, with only 24% of the variability in average CO2 emissions being due to other factors not captured in our model.
 
 ```{r}
 aug <- augment(regression_data) |> 
@@ -331,11 +331,11 @@ df |>
   scale_x_continuous(limits = c(1, 10), breaks = seq(1, 10, 1)) +
   theme_minimal()
 ```
-Figure 4: K fold plot showing that the k-fold average is very close to the original model fit, meaning no over or under fitting has occured. 
+Figure 4: K fold plot showing that the k-fold average is very close to the original model fit, meaning no over or under fitting has occurred. 
 
 ## Conclusion
 
-  In this report, we have explored the relationship between GDP per capita of every country in the world from 1800 until 2022 in 2017 international dollars, and the CO2 emissions per capita of every country in the world from 1800 until 2022. We hypothesized that there'd be a direct linear relationship with an inverse linear trend in recent years due to cleaner energy use in order to combat pollution. Our linear regression model showed a strong positive relationship with an R squared value of 0.84, which suggests that approximately 84% of the variability in average CO2 emissions can be explained by our model, and therefore by average GDP. However, we did not observe an inverse trend in more recent years. This could be due to the averaging of data across all years per country, which may have obscured more recent trends. It may also indicate that while cleaner technologies are emerging, their impact has not yet outweighed increasing economic activity and energy consumption in many countries. 
+  In this report, we have explored the relationship between GDP per capita of every country in the world from 1800 until 2022 in 2017 international dollars, and the CO2 emissions per capita of every country in the world from 1800 until 2022. We hypothesized that there would be a direct linear relationship with an inverse linear trend in recent years due to cleaner energy use in order to combat pollution. Our linear regression model showed a strong positive relationship with an R squared value of 0.84, which suggests that approximately 84% of the variability in average CO2 emissions can be explained by our model, and therefore by average GDP. However, we did not observe an inverse trend in more recent years. This could be due to the averaging of data across all years per country, which may have obscured more recent trends. It may also indicate that while cleaner technologies are emerging, their impact has not yet outweighed increasing economic activity and energy consumption in many countries. 
   Through our k-fold cross validation we found an average R squared of 0.82 with relatively low variance between folds. This suggests that the model's predictive performance indicates good generalization. In conclusion, from our data we can see that the relationship between GDP per capita and CO2 emissions has always been a positive relationship showing that an increase in GDP tends to result in an increase in CO2 emissions from the years 1800 to 2022. We can see that supports our initial hypothesis of a "direct linear relationship", but does not support the initial hypothesis of having an inverse linear trend because of countries switching to cleaner power generation. 
 
 
@@ -344,3 +344,4 @@ Figure 4: K fold plot showing that the k-fold average is very close to the origi
 
 https://www.iea.org/commentaries/the-relationship-between-growth-in-gdp-and-co2-has-loosened-it-needs-to-be-cut-completely
 
+Our Github Repo: https://github.com/Anamooz/stat331-group-project.git 
