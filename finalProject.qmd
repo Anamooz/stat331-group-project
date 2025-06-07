@@ -194,7 +194,7 @@ Figure 2: Animated version of Fig. 1, over the full timescale of the Gapminder D
 
 ### 2.2: Linear Regression
 
-Once fully cleaned, we then fit our data to a linear model to test our hypothesis of a positive trend over time (Fig 3). This is accomplished by guessing a linear fit to our average data points and showing that the trendline agrees with the change in the data over time.
+After cleaning the dataset, we fit a linear regression model to test our hypothesis of a positive trend (Figure 1). This involved estimating a best-fit line for the average data points and evaluating whether the slope indicated a consistent increase over time.
 
 ```{r}
 #Average gdp and co2 per country over all years
@@ -264,7 +264,7 @@ aug |>
 ```
 
 ## Cross-Validation
-To prove our model can work for a variety of test data sets, we performed k-fold cross validation to prove this. This was done by randomly assigning data points into k number of groups, where k, in this study, is 10. From there, we reserve one of the groups as a test dataset while the nine others are used to train a linear model with which we test against the test data. After performing tests k times, we averaged the R2 values to see if the R2 of our original linear model is close. For this study, there was only a difference of about 0.01, which means the linear model is successfully validated.
+To prove our model can work for a variety of test data sets, we performed k-fold cross validation to prove this. This was done by randomly assigning data points into k number of groups, where k, in this study, is 10. From there, we reserve one of the groups as a test dataset while the nine others are used to train a linear model with which we test against the test data. After performing tests k times, we averaged the R2 values to see if the R2 of our original linear model is close. For this study, there was only a difference of about 0.01, which means the linear model is successfully validated and we did not overfit or underfit it.
 
 ```{r}
 
@@ -343,5 +343,7 @@ Figure 4: K fold plot showing that the k-fold average is very close to the origi
 **Citations**
 
 https://www.iea.org/commentaries/the-relationship-between-growth-in-gdp-and-co2-has-loosened-it-needs-to-be-cut-completely
+
+OpenAI. ChatGPT. June 6 version, 2025, https://chat.openai.com.
 
 Our Github Repo: https://github.com/Anamooz/stat331-group-project.git 
