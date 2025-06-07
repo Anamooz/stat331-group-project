@@ -327,6 +327,7 @@ aug |>
 ```
 
 ## Cross-Validation
+To prove our model can work for a variety of test data sets, we performed k-fold cross validation to prove this. This was done by randomly assigning data points into k number of groups, where k, in this study, is 10. From there, we reserve one of the groups as a test dataset while the nine others are used to train a linear model with which we test against the test data. After performing tests k times, we averaged the R2 values to see if the R2 of our original linear model is close. For this study, there was only a difference of about 0.01, which means the linear model is successfully validated.
 
 ```{r}
 
